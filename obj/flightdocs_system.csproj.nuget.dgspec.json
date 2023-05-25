@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/ashleynguci/workspace/internship-alta/project/flightdocs_system/flightdocs_system.csproj": {}
+  },
+  "projects": {
+    "/home/ashleynguci/workspace/internship-alta/project/flightdocs_system/flightdocs_system.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/ashleynguci/workspace/internship-alta/project/flightdocs_system/flightdocs_system.csproj",
+        "projectName": "flightdocs_system",
+        "projectPath": "/home/ashleynguci/workspace/internship-alta/project/flightdocs_system/flightdocs_system.csproj",
+        "packagesPath": "/home/ashleynguci/.nuget/packages/",
+        "outputPath": "/home/ashleynguci/workspace/internship-alta/project/flightdocs_system/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/ashleynguci/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.116/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
