@@ -48,5 +48,65 @@ namespace flightdocs_system.repositories.Account
             }
             return result;
         }
+
+        public async Task<dynamic> Login(LoginTemplate request)
+        {
+            ServiceResponse result = new ServiceResponse();
+
+            string domain = "vietjetair.com";
+            string domainEmail = "@" + domain;
+
+            bool IsDomain = request.Email.EndsWith(domainEmail);
+            if (IsDomain == false)
+            {
+                result.StatusCode = 401;
+                result.isSuccess = false;
+                result.Message = "Not an domain email address";
+                return result;
+            }
+
+            var user = _accountService.FindUserByEmail(request.Email);
+            if (user.isSuccess == false)
+            {
+                result.StatusCode = 404;
+                result.isSuccess = false;
+                result.Message = "Incorrect email address";
+                return result;
+            }
+            else
+            {
+                AccountInfo account = user.Database;
+                var isPasswordCorrect = _accountService.VerifyPassword(request.Password, account.PasswordHash, account.PasswordSalt);
+                if (isPasswordCorrect == false)
+                {
+                    result.StatusCode = 400;
+                    result.isSuccess = false;
+                    result.Message = "Password email address";
+                    return result;
+                }
+
+                string token = _accountService.CreatedToken(account.Name, account.Role);
+
+                var refreshToken = _accountService.CreateAndSetRefreshToken(account);
+
+                CookieOptions cookie = new CookieOptions();
+                if (refreshToken.Database.TryGetValue("cookie", out object value1))
+                {
+                    cookie = value1 as CookieOptions;
+                }
+
+
+                Dictionary<string, object> database = new Dictionary<string, object>();
+                database.Add("token", token);
+                database.Add("cookieOption", cookie);
+
+                result.isSuccess = true;
+                result.StatusCode = 200;
+                result.Message = "Success";
+                result.Database = database;
+            }
+
+            return result;
+        }
     }
 }

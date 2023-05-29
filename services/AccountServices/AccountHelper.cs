@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using flightdocs_system.configs;
 using flightdocs_system.models.Account;
+using flightdocs_system.staticObject.StaticResultResponse;
 using Microsoft.IdentityModel.Tokens;
 
 namespace flightdocs_system.services.AccountServices
@@ -15,7 +16,7 @@ namespace flightdocs_system.services.AccountServices
     {
         private readonly IConfiguration _config;
 
-        private readonly SystemDbContext? _dbContext;
+        private readonly SystemDbContext _dbContext;
 
         public AccountHelper(IConfiguration configuration, SystemDbContext? dbContext)
         {
@@ -76,6 +77,23 @@ namespace flightdocs_system.services.AccountServices
             return result;
         }
 
+        public dynamic FindUserByEmail(string email)
+        {
+            ServiceResponse result = new ServiceResponse();
+            var user = _dbContext.Accounts.FirstOrDefault(a => a.Email == email);
+            if (user == null)
+            {
+                result.isSuccess = false;
+                result.Message = "False to Find";
+                return result;
+            }
+            result.isSuccess = true;
+            result.Message = "";
+            result.Database = user;
+
+            return result;
+        }
+
         public bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA1(passwordSalt))
@@ -86,31 +104,52 @@ namespace flightdocs_system.services.AccountServices
             }
         }
 
-        // private RefreshToken RefreshTokenGenerator()
-        // {
-        //     var refreshToken = new RefreshToken
-        //     {
-        //         Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
-        //         Created = DateTime.Now,
-        //         Expires = DateTime.Now.AddMonths(6)
-        //     };
+        public dynamic CreateAndSetRefreshToken(AccountInfo user)
+        {
+            ServiceResponse result = new ServiceResponse();
+            var token = RefreshTokenGenerator();
+            var cookie = SetRefreshToken(token, user);
+            var cookieOption = cookie.Database;
 
-        //     return refreshToken;
-        // }
 
-        // private void SetRefreshToken(RefreshToken refreshToken, User crrUser)
-        // {
-        //     var cookieOptions = new CookieOptions
-        //     {
-        //         HttpOnly = false,
-        //         Expires = refreshToken.Expires
-        //     };
+            Dictionary<string, object> database = new Dictionary<string, object>();
+            database.Add("cookie", cookieOption);
+            database.Add("refresh_token", token.Token);
 
-        //     Response.Cookies.Append("RefreshToken", refreshToken.Token, cookieOptions);
+            result.isSuccess = true;
+            result.Database = database;
+            return result;
+        }
 
-        //     crrUser.RefreshToken = refreshToken.Token;
-        //     crrUser.CreatedTime = refreshToken.Created;
-        //     crrUser.ExpiresTime = refreshToken.Expires;
-        // }
+        public RefreshToken RefreshTokenGenerator()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Created = DateTime.Now,
+                Expires = DateTime.Now.AddMonths(6)
+            };
+
+            return refreshToken;
+        }
+
+        public dynamic SetRefreshToken(RefreshToken refreshToken, AccountInfo user)
+        {
+            ServiceResponse result = new ServiceResponse();
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = false,
+                Expires = refreshToken.Expires
+            };
+
+
+            user.RefreshToken = refreshToken.Token;
+            user.CreatedTime = refreshToken.Created;
+            user.ExpiresTime = refreshToken.Expires;
+
+            result.isSuccess = true;
+            result.Database = cookieOptions;
+            return result;
+        }
     }
 }
