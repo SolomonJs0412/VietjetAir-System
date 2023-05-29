@@ -18,7 +18,7 @@ namespace flightdocs_system.common
             return stringList;
         }
 
-        private string ConvertStringToJson(List<string> users)
+        public string ConvertStringToJson(List<string> users)
         {
             string json = JsonConvert.SerializeObject(users);
             return json;

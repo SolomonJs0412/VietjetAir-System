@@ -12,7 +12,7 @@ using flightdocs_system.configs;
 namespace flightdocs_system.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20230525152727_Cons")]
+    [Migration("20230529135651_Cons")]
     partial class Cons
     {
         /// <inheritdoc />
@@ -67,6 +67,40 @@ namespace flightdocs_system.Migrations
                     b.HasKey("AccountCd");
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("flightdocs_system.models.Documents.DocumentInfo", b =>
+                {
+                    b.Property<int>("DocCd")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocCd"));
+
+                    b.Property<int>("FlightCd")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupCd")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Permission")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("S3Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Version")
+                        .HasColumnType("float");
+
+                    b.HasKey("DocCd");
+
+                    b.ToTable("Documents");
                 });
 #pragma warning restore 612, 618
         }

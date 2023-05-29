@@ -31,6 +31,24 @@ namespace flightdocs_system.Migrations
                 {
                     table.PrimaryKey("PK_Accounts", x => x.AccountCd);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    DocCd = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    S3Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FlightCd = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<double>(type: "float", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Permission = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupCd = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.DocCd);
+                });
         }
 
         /// <inheritdoc />
@@ -38,6 +56,9 @@ namespace flightdocs_system.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Accounts");
+
+            migrationBuilder.DropTable(
+                name: "Documents");
         }
     }
 }

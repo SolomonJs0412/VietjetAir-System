@@ -9,5 +9,6 @@ namespace flightdocs_system.repositories.Account
     public interface IAccountRepository
     {
         Task<dynamic> CreateNewAccount(CreateTemplate request);
+        Task<dynamic> Login(LoginTemplate request);
     }
 }

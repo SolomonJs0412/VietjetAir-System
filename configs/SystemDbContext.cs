@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using flightdocs_system.models.Account;
+using flightdocs_system.models.Documents;
 using Microsoft.EntityFrameworkCore;
 
 namespace flightdocs_system.configs
@@ -14,5 +15,6 @@ namespace flightdocs_system.configs
         public SystemDbContext(DbContextOptions<SystemDbContext> options) : base(options) { }
 
         public DbSet<AccountInfo> Accounts { get; set; }
+        public DbSet<DocumentInfo> Documents { get; set; }
     }
 }

@@ -38,6 +38,18 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AWSSDK.Core": {
+              "target": "Package",
+              "version": "[3.7.106.43, )"
+            },
+            "AWSSDK.Extensions.NETCore.Setup": {
+              "target": "Package",
+              "version": "[3.7.7, )"
+            },
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.104.23, )"
+            },
             "AutoMapper": {
               "target": "Package",
               "version": "[12.0.1, )"
@@ -79,6 +91,10 @@
             "Swashbuckle.AspNetCore.Filters": {
               "target": "Package",
               "version": "[7.0.6, )"
+            },
+            "iTextSharp": {
+              "target": "Package",
+              "version": "[5.5.13.3, )"
             }
           },
           "imports": [
