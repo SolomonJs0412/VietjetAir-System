@@ -12,5 +12,7 @@ namespace flightdocs_system.models.http.http_request.Account
         public string Role { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public int GroupCd { get; set; }
+        public int isActivate { get; set; } = 0;
     }
 }

@@ -40,6 +40,44 @@ namespace flightdocs_system.services.AccountServices
 
         }
 
+        public dynamic GetCurrentUser(string token)
+        {
+            AccountInfo user = new AccountInfo();
+            try
+            {
+                var result = _dbContext.Accounts.FirstOrDefault(u => u.RefreshToken == token);
+                if (result != null)
+                {
+                    user = result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving data sources" + ex.Message);
+                return ex.Message;
+            }
+            return user;
+
+        }
+        public dynamic UsersByGroup(int cd)
+        {
+            dynamic result = 0;
+            try
+            {
+                var getResult = _dbContext.Accounts.Where(g => g.GroupCd == cd).ToList();
+                if (result != null)
+                {
+                    result = getResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving data sources" + ex.Message);
+                return ex.Message;
+            }
+            return (result != null) ? result : false;
+        }
+
         public string CreatedToken(string name, string role)
         {
             List<Claim> claims = new List<Claim>
@@ -104,17 +142,15 @@ namespace flightdocs_system.services.AccountServices
             }
         }
 
-        public dynamic CreateAndSetRefreshToken(AccountInfo user)
+        public dynamic RefreshTokenSv(AccountInfo user, dynamic token)
         {
             ServiceResponse result = new ServiceResponse();
-            var token = RefreshTokenGenerator();
             var cookie = SetRefreshToken(token, user);
             var cookieOption = cookie.Database;
 
 
-            Dictionary<string, object> database = new Dictionary<string, object>();
+            Dictionary<string, dynamic> database = new Dictionary<string, object>();
             database.Add("cookie", cookieOption);
-            database.Add("refresh_token", token.Token);
 
             result.isSuccess = true;
             result.Database = database;
@@ -149,6 +185,7 @@ namespace flightdocs_system.services.AccountServices
 
             result.isSuccess = true;
             result.Database = cookieOptions;
+            _dbContext.SaveChanges();
             return result;
         }
     }

@@ -35,6 +35,8 @@ namespace flightdocs_system.repositories.Account
                 var passwordSeikyu = _accountService.CreatePasswordHash(request.Password);
                 newAccount.PasswordHash = passwordSeikyu["passwordHash"];
                 newAccount.PasswordSalt = passwordSeikyu["passwordSalt"];
+                newAccount.GroupCd = request.GroupCd;
+                newAccount.isActivate = request.isActivate;
                 result.isSuccess = await _accountService.SaveDataSources(newAccount);
                 if (result.isSuccess)
                 {
@@ -87,18 +89,22 @@ namespace flightdocs_system.repositories.Account
 
                 string token = _accountService.CreatedToken(account.Name, account.Role);
 
-                var refreshToken = _accountService.CreateAndSetRefreshToken(account);
+                var restoken = _accountService.RefreshTokenGenerator();
+                var refreshToken = _accountService.RefreshTokenSv(account, restoken);
 
                 CookieOptions cookie = new CookieOptions();
+                string refresh = "";
                 if (refreshToken.Database.TryGetValue("cookie", out object value1))
                 {
                     cookie = value1 as CookieOptions;
                 }
 
+                refresh = (string)restoken.Token;
 
                 Dictionary<string, object> database = new Dictionary<string, object>();
                 database.Add("token", token);
                 database.Add("cookieOption", cookie);
+                database.Add("refresh-token", refresh);
 
                 result.isSuccess = true;
                 result.StatusCode = 200;
@@ -106,6 +112,51 @@ namespace flightdocs_system.repositories.Account
                 result.Database = database;
             }
 
+            return result;
+        }
+
+        public async Task<dynamic> CurrentUser(string token)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var getResult = _accountService.GetCurrentUser(token);
+                if (getResult.GetType() == typeof(AccountInfo))
+                {
+                    result.Database = getResult;
+                    result.isSuccess = true;
+                    result.StatusCode = 200;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error creating from CreateNewAccount" + ex.Message);
+                result.isSuccess = false;
+                result.StatusCode = 502;
+                return result;
+            }
+            return result;
+        }
+        public async Task<ServiceResponse> GetUsersByGroup(int cd)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var getResult = _accountService.UsersByGroup(cd);
+                if (getResult != null)
+                {
+                    result.Database = getResult;
+                    result.isSuccess = true;
+                    result.StatusCode = 200;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error creating from CreateNewAccount" + ex.Message);
+                result.isSuccess = false;
+                result.StatusCode = 502;
+                return result;
+            }
             return result;
         }
     }

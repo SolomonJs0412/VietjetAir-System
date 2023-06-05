@@ -28,17 +28,17 @@ namespace flightdocs_system.Controllers.Document
             try
             {
                 var response = await _docServices.UploadNewDocs(request, file);
-                if (response.StatusCode != 200)
+                if (response.StatusCode != 201)
                 {
                     result.isSuccess = false;
-                    result.Message = response.Message ? response.Message : "";
+                    result.Message = (response.Message != "" || response.Message != null) ? response.Message : "";
                     result.StatusCode = response.StatusCode;
                     return result;
                 }
                 else
                 {
-                    result.isSuccess = false;
-                    result.Message = response.Message ? response.Message : "";
+                    result.isSuccess = true;
+                    result.Message = (response.Message != "" || response.Message != null) ? response.Message : "";
                     result.StatusCode = response.StatusCode;
                     result.Database = response.Database;
                 }

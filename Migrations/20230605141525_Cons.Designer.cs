@@ -12,7 +12,7 @@ using flightdocs_system.configs;
 namespace flightdocs_system.Migrations
 {
     [DbContext(typeof(SystemDbContext))]
-    [Migration("20230529135651_Cons")]
+    [Migration("20230605141525_Cons")]
     partial class Cons
     {
         /// <inheritdoc />
@@ -43,6 +43,9 @@ namespace flightdocs_system.Migrations
                     b.Property<DateTime>("ExpiresTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("GroupCd")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -64,6 +67,9 @@ namespace flightdocs_system.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("isActivate")
+                        .HasColumnType("int");
+
                     b.HasKey("AccountCd");
 
                     b.ToTable("Accounts");
@@ -83,17 +89,12 @@ namespace flightdocs_system.Migrations
                     b.Property<int>("GroupCd")
                         .HasColumnType("int");
 
-                    b.Property<string>("Permission")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("S3Key")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<double>("Version")
                         .HasColumnType("float");
@@ -101,6 +102,33 @@ namespace flightdocs_system.Migrations
                     b.HasKey("DocCd");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("flightdocs_system.models.Group.GroupInfo", b =>
+                {
+                    b.Property<int>("GroupCd")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupCd"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserInsCd")
+                        .HasColumnType("int");
+
+                    b.HasKey("GroupCd");
+
+                    b.ToTable("Groups");
                 });
 #pragma warning restore 612, 618
         }
