@@ -13,8 +13,7 @@ namespace flightdocs_system.models.Documents
         public string S3Key { get; set; } = string.Empty;
         public int FlightCd { get; set; }
         public double Version { get; set; } = 1;
-        public string Type { get; set; } = string.Empty;
-        public string Permission { get; set; } = string.Empty;
+        public int Type { get; set; }
         public int GroupCd { get; set; }
     }
 }

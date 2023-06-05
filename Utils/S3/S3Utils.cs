@@ -107,5 +107,8 @@ namespace flightdocs_system.Utils.S3
             }
             return result;
         }
+
+        // public async Task<dynamic> Get(string bucketName, string key
+
     }
 }

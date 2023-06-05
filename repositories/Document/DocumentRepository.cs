@@ -56,9 +56,7 @@ namespace flightdocs_system.repositories.Document
 
                 doc.S3Key = s3Key;
                 doc.FlightCd = request.FlightCd;
-                doc.GroupCd = request.GroupCd;
                 doc.Type = request.Type;
-                doc.Permission = _string.ConvertStringToJson(request.Permission);
 
                 var isSuccess = await _docServices.SaveDocuments(doc);
 
