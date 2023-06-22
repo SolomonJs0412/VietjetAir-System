@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using flightdocs_system.models.http.http_request.Account;
 using flightdocs_system.repositories.Account;
 using flightdocs_system.staticObject.StaticResultResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace flightdocs_system.Controllers
@@ -20,6 +21,7 @@ namespace flightdocs_system.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [Route("insertData")]
         public async Task<IActionResult> insertAccount([FromBody] CreateTemplate request)
         {
@@ -204,6 +206,7 @@ namespace flightdocs_system.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin")]
         [Route("bye/{id}")]
         public async Task<dynamic> DeleteByCd(int id)
         {

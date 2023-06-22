@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using flightdocs_system.models.http.http_request.Type;
 using flightdocs_system.repositories.Type;
 using flightdocs_system.staticObject.StaticResultResponse;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace flightdocs_system.Controllers.Type
 {
@@ -20,6 +22,7 @@ namespace flightdocs_system.Controllers.Type
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, GO")]
         [Route("new")]
         public async Task<dynamic> NewType([FromForm] NewTypeRequestTemplate request)
         {
@@ -50,6 +53,7 @@ namespace flightdocs_system.Controllers.Type
 
         [HttpPut]
         [Route("update/{cd}")]
+        [Authorize(Roles = "Admin")]
         public async Task<dynamic> Update([FromForm] NewTypeRequestTemplate request, int cd)
         {
             ServiceResponse result = new ServiceResponse();
@@ -139,6 +143,7 @@ namespace flightdocs_system.Controllers.Type
 
         [HttpDelete]
         [Route("bye/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<dynamic> DeleteType(int id)
         {
             ServiceResponse result = new ServiceResponse();
