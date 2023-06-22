@@ -154,13 +154,18 @@ namespace flightdocs_system.Controllers
         }
 
         [HttpPost]
-        [Route("update")]
-        public async Task<ActionResult<dynamic>> Update()
+        [Route("update/{id}")]
+        public async Task<ActionResult<dynamic>> Update([FromBody] UpdateAccount req, int id)
         {
             ServiceResponse result = new ServiceResponse();
             try
             {
-
+                var getResult = await _accountRepository.UpdateUser(req, id);
+                if (getResult.isSuccess)
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 200;
+                }
             }
             catch (Exception ex)
             {
@@ -198,5 +203,30 @@ namespace flightdocs_system.Controllers
             return result;
         }
 
+        [HttpDelete]
+        [Route("bye/{id}")]
+        public async Task<dynamic> DeleteByCd(int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var getResponse = await _accountRepository.DeleteUser(id);
+                if (getResponse.isSuccess)
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 200;
+                    result.Message = "";
+                    result.Database = getResponse.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Logout error:" + ex.Message);
+                result.isSuccess = false;
+                result.StatusCode = 502;
+                result.Message = "";
+            }
+            return result;
+        }
     }
 }

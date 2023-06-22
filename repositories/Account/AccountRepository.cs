@@ -159,5 +159,50 @@ namespace flightdocs_system.repositories.Account
             }
             return result;
         }
+
+        public async Task<ServiceResponse> UpdateUser(UpdateAccount req, int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var getResult = _accountService.UpdateAccount(req, id);
+
+                if (getResult != null)
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 200;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.isSuccess = false;
+                result.StatusCode = 502;
+                Console.WriteLine("Error updating user" + ex.Message);
+            }
+            return result;
+        }
+        public async Task<ServiceResponse> DeleteUser(int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var getResult = _accountService.UpdateAccount(id);
+
+                if (getResult != null)
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 200;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                result.isSuccess = false;
+                result.StatusCode = 502;
+                Console.WriteLine("Error updating user" + ex.Message);
+            }
+            return result;
+        }
     }
 }

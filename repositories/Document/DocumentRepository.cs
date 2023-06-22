@@ -57,6 +57,7 @@ namespace flightdocs_system.repositories.Document
                 doc.S3Key = s3Key;
                 doc.FlightCd = request.FlightCd;
                 doc.Type = request.Type;
+                doc.CreatedAt = DateTime.Now;
 
                 var isSuccess = await _docServices.SaveDocuments(doc);
 

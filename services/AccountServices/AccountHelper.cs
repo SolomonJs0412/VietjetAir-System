@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using flightdocs_system.configs;
 using flightdocs_system.models.Account;
+using flightdocs_system.models.http.http_request.Account;
 using flightdocs_system.staticObject.StaticResultResponse;
 using Microsoft.IdentityModel.Tokens;
 
@@ -57,6 +58,50 @@ namespace flightdocs_system.services.AccountServices
                 return ex.Message;
             }
             return user;
+
+        }
+        public async Task<Boolean> UpdateAccount(UpdateAccount req, int id)
+        {
+            var result = true;
+            try
+            {
+                var user = _dbContext.Accounts.FirstOrDefault(u => u.AccountCd == id);
+                if (user != null)
+                {
+                    user.Name = req.Name;
+                    user.Email = req.Email;
+                    user.PhoneNumber = req.PhoneNumber;
+                    user.Role = req.Role;
+                    user.GroupCd = req.GroupCd;
+                }
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving data sources" + ex.Message);
+                result = false;
+            }
+            return result;
+
+        }
+        public async Task<Boolean> UpdateAccount(int id)
+        {
+            var result = true;
+            try
+            {
+                var user = _dbContext.Accounts.FirstOrDefault(u => u.AccountCd == id);
+                if (user != null)
+                {
+                    _dbContext.Accounts.Remove(user);
+                }
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving data sources" + ex.Message);
+                result = false;
+            }
+            return result;
 
         }
         public dynamic UsersByGroup(int cd)

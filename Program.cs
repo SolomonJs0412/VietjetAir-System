@@ -3,9 +3,11 @@ using flightdocs_system.configs;
 using flightdocs_system.repositories.Account;
 using flightdocs_system.repositories.Document;
 using flightdocs_system.repositories.Group;
+using flightdocs_system.repositories.Permission;
 using flightdocs_system.services.AccountServices;
 using flightdocs_system.services.DocumentServices;
 using flightdocs_system.services.GroupServices;
+using flightdocs_system.services.PermissionServices;
 using flightdocs_system.Utils.S3;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +23,7 @@ builder.Services.AddDbContext<SystemDbContext>(options =>
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
 builder.Services.AddScoped<IS3Utils, S3Utils>();
 
 builder.Services.AddControllers();
@@ -32,6 +35,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<StringSupport>();
 builder.Services.AddScoped<AccountHelper>();
 builder.Services.AddScoped<GroupHelper>();
+builder.Services.AddScoped<PermissionHelper>();
 builder.Services.AddScoped<EmailValidatorService>();
 builder.Services.AddScoped<S3ClientFactory>();
 builder.Services.AddScoped<DocumentSevices>();

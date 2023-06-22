@@ -29,13 +29,13 @@ namespace flightdocs_system.repositories.Group
                 group.GroupName = request.GroupName;
                 group.Note = request.Note;
                 group.UserInsCd = request.UserInsCd;
+                group.CreatedAt = DateTime.Now;
 
                 var saveResult = await _groupService.SaveNewGroup(group) ? true : false;
                 if (saveResult)
                 {
                     result.isSuccess = true;
                     result.StatusCode = 201;
-                    result.Database = group;
                 }
             }
             catch (Exception ex)
@@ -62,6 +62,70 @@ namespace flightdocs_system.repositories.Group
                     result.isSuccess = true;
                     result.StatusCode = 201;
                     result.Database = group;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Create group error:" + ex.Message);
+                result.isSuccess = false;
+                result.Message = ex.Message;
+                result.StatusCode = 502;
+            }
+            return result;
+        }
+        public async Task<ServiceResponse> GetGroupByCd(int groupCd)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var group = _groupService.FindGroupByCd(groupCd);
+                if (group != null)
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = group;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Create group error:" + ex.Message);
+                result.isSuccess = false;
+                result.Message = ex.Message;
+                result.StatusCode = 502;
+            }
+            return result;
+        }
+        public async Task<ServiceResponse> DeleteByCd(int groupCd)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var group = _groupService.FindGroupByCd(groupCd);
+                if (group != null)
+                {
+                    var getResult = _groupService.DeleteGroup(group);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Create group error:" + ex.Message);
+                result.isSuccess = false;
+                result.Message = ex.Message;
+                result.StatusCode = 502;
+            }
+            return result;
+        }
+        public async Task<ServiceResponse> GetAllGRoup()
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var groups = _groupService.GetAll();
+                if (groups != null)
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = groups;
                 }
             }
             catch (Exception ex)

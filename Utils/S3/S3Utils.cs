@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.Extensions.NETCore.Setup;
@@ -8,6 +9,7 @@ using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using flightdocs_system.common;
+using flightdocs_system.models.http.http_request.Permission;
 using flightdocs_system.staticObject.StaticResultResponse;
 
 namespace flightdocs_system.Utils.S3
@@ -15,6 +17,7 @@ namespace flightdocs_system.Utils.S3
     public class S3Utils : IS3Utils
     {
         IAmazonS3 _s3Client = S3ClientFactory.GetS3Client();
+        public readonly StringSupport _string;
         public async Task<dynamic> UploadFileToS3(IFormFile file)
         {
             ServiceResponse result = new ServiceResponse();
@@ -108,7 +111,96 @@ namespace flightdocs_system.Utils.S3
             return result;
         }
 
-        // public async Task<dynamic> Get(string bucketName, string key
+        public async Task<dynamic> CreateFolder(string bucketName, string folderName)
+        {
+            var result = false;
+            try
+            {
+                var s3Client = new AmazonS3Client(RegionEndpoint.USWest2); // Replace with your desired region
+
+                var request = new PutObjectRequest
+                {
+                    BucketName = bucketName,
+                    Key = folderName,
+                    ContentBody = string.Empty // Empty content for creating an empty folder
+                };
+
+                var response = await s3Client.PutObjectAsync(request);
+                if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Console.WriteLine("Folder created successfully!");
+                    result = true;
+                }
+                else
+                {
+                    Console.WriteLine("Failed to create the folder.");
+                    result = false;
+                }
+            }
+            catch (AmazonS3Exception ex)
+            {
+                Console.WriteLine($"Error creating the folder: {ex.Message}");
+                result = false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                result = false;
+            }
+            return result;
+        }
+
+        public async Task<dynamic> CreateJsonFileAsync(string folderName, List<PerCreateRequest> reqList)
+        {
+            var result = false;
+            try
+            {
+                String FileName = "permissions.json";
+                string bucketName = "flightdocs-demo";
+                var permissions = new
+                {
+                    Read = true,
+                    Write = false,
+                    Execute = true
+                };
+
+                var jsonString = _string.ConvertObjectToJson(reqList);
+                var jsonBytes = Encoding.UTF8.GetBytes(jsonString);
+
+                using (var stream = new MemoryStream(jsonBytes))
+                {
+                    var request = new PutObjectRequest
+                    {
+                        BucketName = bucketName,
+                        Key = folderName + FileName,
+                        InputStream = stream
+                    };
+
+                    var response = await _s3Client.PutObjectAsync(request);
+                    if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        Console.WriteLine("JSON file created successfully!");
+                        result = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to create the JSON file.");
+                        result = false;
+                    }
+                }
+            }
+            catch (AmazonS3Exception ex)
+            {
+                result = false;
+                Console.WriteLine($"Error creating the JSON file: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            return result;
+        }
 
     }
 }
