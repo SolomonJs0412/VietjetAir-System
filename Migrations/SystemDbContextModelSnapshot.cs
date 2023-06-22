@@ -131,32 +131,6 @@ namespace flightdocs_system.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("flightdocs_system.models.Permissions.PermissionInfo", b =>
-                {
-                    b.Property<int>("PermissionCd")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionCd"));
-
-                    b.Property<int>("GroupCd")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PermissionsCd")
-                        .HasColumnType("int");
-
-                    b.Property<string>("S3Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TypeCd")
-                        .HasColumnType("int");
-
-                    b.HasKey("PermissionCd");
-
-                    b.ToTable("Permissions");
-                });
-
             modelBuilder.Entity("flightdocs_system.models.Type.TypeInf", b =>
                 {
                     b.Property<int>("TypeCd")
@@ -171,11 +145,15 @@ namespace flightdocs_system.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("S3Content")
+                    b.Property<string>("PermissionStr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
