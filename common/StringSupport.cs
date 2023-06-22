@@ -31,5 +31,29 @@ namespace flightdocs_system.common
             return new string(Enumerable.Repeat(chars, 16)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+
+        public List<object> SliceString(string input)
+        {
+            string[] segments = input.Split('-');
+            List<object> result = new List<object>();
+
+            foreach (string segment in segments)
+            {
+                string type = segment.Substring(0, 1);
+                string permission = segment.Substring(1, 1);
+                string group = segment.Substring(2);
+
+                var obj = new
+                {
+                    type = type,
+                    permission = permission,
+                    group = group
+                };
+
+                result.Add(obj);
+            }
+
+            return result;
+        }
     }
 }

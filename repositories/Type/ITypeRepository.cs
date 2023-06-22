@@ -11,5 +11,8 @@ namespace flightdocs_system.repositories.Type
     {
         Task<ServiceResponse> CreateType(NewTypeRequestTemplate request);
         Task<ServiceResponse> UpdateType(NewTypeRequestTemplate request, int cd);
+        Task<ServiceResponse> GetTypeByCd(int typecd);
+        Task<ServiceResponse> GetAllType();
+        Task<ServiceResponse> DeleteByCd(int groupCd);
     }
 }
