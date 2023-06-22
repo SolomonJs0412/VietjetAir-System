@@ -78,5 +78,43 @@ namespace flightdocs_system.services.TypeServices
             }
             return result;
         }
+
+        public List<TypeInf> GetAll()
+        {
+            var result = new List<TypeInf>();
+            try
+            {
+                result = _dbContext.Types.ToList();
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving data sources" + ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<dynamic> DeleteType(TypeInf cd)
+        {
+            var result = true;
+            try
+            {
+                var getRsl = _dbContext.Types.Remove(cd);
+                await _dbContext.SaveChangesAsync();
+                if (getRsl != null)
+                {
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                Console.WriteLine("Error saving data sources" + ex.Message);
+            }
+            return result;
+        }
     }
 }

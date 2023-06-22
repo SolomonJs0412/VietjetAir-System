@@ -77,5 +77,93 @@ namespace flightdocs_system.Controllers.Type
             }
             return result;
         }
+
+        [HttpGet]
+        [Route("get/{id}")]
+        public async Task<dynamic> GetTypeByCd(int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var response = await _typeRepository.GetTypeByCd(id);
+                if (response.StatusCode == 502)
+                {
+                    result.isSuccess = false;
+                    result.Message = (response.Message != null) ? response.Message : "";
+                    result.StatusCode = response.StatusCode;
+                    result.Database = response.Database;
+                    return result;
+                }
+                else
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = response.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal error: " + ex.Message);
+            }
+            return result;
+        }
+
+        [HttpGet]
+        [Route("get")]
+        public async Task<dynamic> GetAllType()
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var response = await _typeRepository.GetAllType();
+                if (response.StatusCode == 502)
+                {
+                    result.isSuccess = false;
+                    result.Message = (response.Message != null) ? response.Message : "";
+                    result.StatusCode = response.StatusCode;
+                    return result;
+                }
+                else
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = response.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal error: " + ex.Message);
+            }
+            return result;
+        }
+
+        [HttpDelete]
+        [Route("bye/{id}")]
+        public async Task<dynamic> DeleteType(int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var response = await _typeRepository.DeleteByCd(id);
+                if (response.StatusCode == 502)
+                {
+                    result.isSuccess = false;
+                    result.Message = (response.Message != null) ? response.Message : "";
+                    result.StatusCode = response.StatusCode;
+                    return result;
+                }
+                else
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = response.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal error: " + ex.Message);
+            }
+            return result;
+        }
     }
 }
