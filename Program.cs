@@ -1,3 +1,4 @@
+using System.Text;
 using flightdocs_system.common;
 using flightdocs_system.configs;
 using flightdocs_system.repositories.Account;
@@ -9,7 +10,11 @@ using flightdocs_system.services.DocumentServices;
 using flightdocs_system.services.GroupServices;
 using flightdocs_system.services.TypeServices;
 using flightdocs_system.Utils.S3;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +45,41 @@ builder.Services.AddScoped<EmailValidatorService>();
 builder.Services.AddScoped<S3ClientFactory>();
 builder.Services.AddScoped<DocumentSevices>();
 builder.Services.AddScoped<SQLcommon>();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = "Nothings",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
+builder.Services.AddAuthentication(
+    JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("abc-egc-24-23he0-323-q232q")),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.DictionaryKeyPolicy = null;
+    });
+
+builder.Services.AddDirectoryBrowser();
 
 var app = builder.Build();
 

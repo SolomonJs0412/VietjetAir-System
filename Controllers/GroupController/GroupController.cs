@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using flightdocs_system.models.http.http_request.Group;
 using flightdocs_system.repositories.Group;
 using flightdocs_system.staticObject.StaticResultResponse;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace flightdocs_system.Controllers.GroupController
@@ -21,6 +22,7 @@ namespace flightdocs_system.Controllers.GroupController
 
         [HttpPost]
         [Route("new")]
+        [Authorize(Roles = "Admin")]
         public async Task<dynamic> NewGroup([FromForm] GroupCreate request)
         {
             ServiceResponse result = new ServiceResponse();
@@ -50,6 +52,7 @@ namespace flightdocs_system.Controllers.GroupController
 
         [HttpPut]
         [Route("update")]
+        [Authorize(Roles = "Admin, GO")]
         public async Task<dynamic> Update([FromForm] GroupCreate request, int cd)
         {
             ServiceResponse result = new ServiceResponse();
@@ -109,6 +112,7 @@ namespace flightdocs_system.Controllers.GroupController
 
         [HttpDelete]
         [Route("bye/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<dynamic> DeleteGroup(int id)
         {
             ServiceResponse result = new ServiceResponse();
