@@ -13,5 +13,7 @@ namespace flightdocs_system.repositories.Account
         Task<dynamic> Login(LoginTemplate request);
         Task<dynamic> CurrentUser(string token);
         Task<ServiceResponse> GetUsersByGroup(int cd);
+        Task<ServiceResponse> UpdateUser(UpdateAccount req, int id);
+        Task<ServiceResponse> DeleteUser(int id);
     }
 }

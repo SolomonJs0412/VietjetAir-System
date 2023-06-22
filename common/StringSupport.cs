@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using flightdocs_system.models.http.http_request.Permission;
+using flightdocs_system.models.Permissions;
 using Newtonsoft.Json;
 
 namespace flightdocs_system.common
@@ -30,6 +32,19 @@ namespace flightdocs_system.common
             var random = new Random();
             return new string(Enumerable.Repeat(chars, 16)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        public dynamic ConvertObjectToJson(List<PerCreateRequest> request)
+        {
+            dynamic result = "";
+            try
+            {
+                result = JsonConvert.SerializeObject(request);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("Error when concerning" + exception.Message);
+            }
+            return result;
         }
     }
 }

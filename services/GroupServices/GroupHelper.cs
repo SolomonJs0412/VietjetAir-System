@@ -54,6 +54,42 @@ namespace flightdocs_system.services.GroupServices
                 return false;
             }
         }
+        public List<GroupInfo> GetAll()
+        {
+            var result = new List<GroupInfo>();
+            try
+            {
+                result = _dbContext.Groups.ToList();
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving data sources" + ex.Message);
+            }
+            return result;
+        }
+        public async Task<dynamic> DeleteGroup(GroupInfo cd)
+        {
+            var result = true;
+            try
+            {
+                var getRsl = _dbContext.Groups.Remove(cd);
+                await _dbContext.SaveChangesAsync();
+                if (getRsl != null)
+                {
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                Console.WriteLine("Error saving data sources" + ex.Message);
+            }
+            return result;
+        }
 
         public async Task<dynamic> SaveUpdate(GroupCreate updateInfo, GroupInfo group)
         {

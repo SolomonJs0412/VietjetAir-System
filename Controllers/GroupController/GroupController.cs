@@ -27,19 +27,18 @@ namespace flightdocs_system.Controllers.GroupController
             try
             {
                 var response = await _groupRepository.CreateGroup(request);
-                if (response.StatusCode != 200)
+                if (response.StatusCode != 201)
                 {
                     result.isSuccess = false;
-                    result.Message = response.Message ? response.Message : "";
+                    result.Message = (response.Message != null) ? response.Message : "";
                     result.StatusCode = response.StatusCode;
                     return result;
                 }
                 else
                 {
-                    result.isSuccess = false;
+                    result.isSuccess = true;
                     result.Message = response.Message ? response.Message : "";
                     result.StatusCode = response.StatusCode;
-                    result.Database = response.Database;
                 }
             }
             catch (Exception ex)
@@ -66,8 +65,95 @@ namespace flightdocs_system.Controllers.GroupController
                 }
                 else
                 {
-                    result.isSuccess = false;
+                    result.isSuccess = true;
                     result.Message = response.Message ? response.Message : "";
+                    result.StatusCode = 201;
+                    result.Database = response.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal error: " + ex.Message);
+            }
+            return result;
+        }
+
+        [HttpGet]
+        [Route("get/{id}")]
+        public async Task<dynamic> GetGRoupByCd(int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var response = await _groupRepository.GetGroupByCd(id);
+                if (response.StatusCode == 502)
+                {
+                    result.isSuccess = false;
+                    result.Message = (response.Message != null) ? response.Message : "";
+                    result.StatusCode = response.StatusCode;
+                    return result;
+                }
+                else
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = response.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal error: " + ex.Message);
+            }
+            return result;
+        }
+
+        [HttpDelete]
+        [Route("bye/{id}")]
+        public async Task<dynamic> DeleteGroup(int id)
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var response = await _groupRepository.DeleteByCd(id);
+                if (response.StatusCode == 502)
+                {
+                    result.isSuccess = false;
+                    result.Message = (response.Message != null) ? response.Message : "";
+                    result.StatusCode = response.StatusCode;
+                    return result;
+                }
+                else
+                {
+                    result.isSuccess = true;
+                    result.StatusCode = 201;
+                    result.Database = response.Database;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Internal error: " + ex.Message);
+            }
+            return result;
+        }
+
+        [HttpGet]
+        [Route("get")]
+        public async Task<dynamic> GetAllGRoup()
+        {
+            ServiceResponse result = new ServiceResponse();
+            try
+            {
+                var response = await _groupRepository.GetAllGRoup();
+                if (response.StatusCode == 502)
+                {
+                    result.isSuccess = false;
+                    result.Message = (response.Message != null) ? response.Message : "";
+                    result.StatusCode = response.StatusCode;
+                    return result;
+                }
+                else
+                {
+                    result.isSuccess = true;
                     result.StatusCode = 201;
                     result.Database = response.Database;
                 }

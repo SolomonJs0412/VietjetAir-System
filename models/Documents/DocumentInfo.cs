@@ -15,5 +15,6 @@ namespace flightdocs_system.models.Documents
         public double Version { get; set; } = 1;
         public int Type { get; set; }
         public int GroupCd { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }
